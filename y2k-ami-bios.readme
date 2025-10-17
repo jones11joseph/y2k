@@ -1,0 +1,22 @@
+However, applications and bootloaders that run on a PC can interact with the system's hardware and BIOS through assembly code, as demonstrated in the previous example.
+The methods used to read and write to the CMOS registers are universal to x86-based PCs, and therefore apply to systems with an AMI BIOS just as they would for other BIOS vendors like Award or Phoenix
+.
+Here is an assembly program designed for a system with an AMI BIOS, written in a format compatible with NASM (Netwide Assembler). It builds upon the previous examples but uses a boot sector structure.
+Features of this AMI BIOS assembly code
+
+    Boot sector structure: This code is a self-contained program designed to be written to the first sector of a floppy disk or hard drive. The BIOS will load and execute this code automatically.
+    Prints boot message: It prints a custom message to the screen using standard BIOS video services.
+    Interacts with CMOS: It reads the date from the RTC via the standard CMOS ports (70h and 71h).
+    Displays formatted date: It converts the BCD date components to ASCII and displays them in DD-MM-YYYY format.
+    Includes Y2K-compliant century handling: It reads the century from the CMOS register, which is a standard feature on most motherboards that have an AMI BIOS.
+
+How to use the code
+
+    Save: Save the code as a file, for example, ami_boot.asm.
+    Assemble: Use NASM to assemble the code into a raw binary file:
+    nasm -f bin ami_boot.asm -o ami_boot.bin
+    Create bootable medium: Write the resulting ami_boot.bin file to the first sector of a floppy disk or a hard drive image.
+        On Linux: sudo dd if=ami_boot.bin of=/dev/sdX (replace sdX with your device).
+        On Windows (via WSL): Follow the Linux instructions.
+        In an emulator: Configure a disk image in a PC emulator like QEMU or VirtualBox to use ami_boot.bin as the boot device.
+    Boot: Boot the system from the disk containing the code. The message and current date will be displayed on the screen.
